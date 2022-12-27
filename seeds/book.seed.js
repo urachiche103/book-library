@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Book = require('../models/Book');
+const { DB_URL } = require('../utils/db');
 
 const book = [
     {
@@ -1008,7 +1009,7 @@ const book = [
     const bookDocuments = book.map(item => new Book(item));
 
 mongoose
-.connect('mongodb://localhost:27017/book-library', {
+.connect(DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })

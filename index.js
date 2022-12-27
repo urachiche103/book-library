@@ -2,10 +2,11 @@ const express = require('express');
 
 // utils
 const connect = require('./utils/db');
+require('dotenv').config();
 
 // server config
 connect();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const server = express();
 const router = express.Router();
 
