@@ -1,5 +1,9 @@
 const express = require('express');
 
+// authentication
+const passport = require('passport');
+require('./authentication/passport');
+
 // utils
 const connect = require('./utils/db');
 require('dotenv').config();
@@ -11,13 +15,16 @@ const server = express();
 const router = express.Router();
 
 // routes
+const userRoutes = require('./routes/user.routes');
 const bookRoutes = require('./routes/book.routes');
 
 // Middlewares
+server.use(passport.initialize());
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 
 // routes
+server.use('/users', userRoutes);
 server.use('/books', bookRoutes);
 
 // error control
