@@ -1006,22 +1006,23 @@ const book = [
     }
     ]
 
-    const bookDocuments = book.map(item => new Book(item));
+const bookDocuments = book.map(item => new Book(item));
 
 mongoose
-.connect(DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(async () => {
-    const allBooks = await Book.find();
-    if (allBooks.length) {
-        await Book.collection.drop();
-    }
-})
-.catch((err) => console.log(`Error deleting data: ${err}`))
-.then(async () => {
-    await Book.insertMany(bookDocuments);
-})
-.catch((err) => console.log(`Error creating data: ${err}`))
-.finally(() => mongoose.disconnect());
+    .connect(DB_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(async () => {
+        const allBooks = await Book.find();
+        
+        if (allBooks.length) {
+            await Book.collection.drop();
+        }
+    })
+    .catch((err) => console.log(`Error deleting data: ${err}`))
+    .then(async () => {
+        await Book.insertMany(bookDocuments);
+    })
+    .catch((err) => console.log(`Error creating data: ${err}`))
+    .finally(() => mongoose.disconnect());

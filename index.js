@@ -1,31 +1,31 @@
 const express = require('express');
+require('dotenv').config();
 
 // authentication
 const passport = require('passport');
 require('./authentication/passport');
 
 // utils
-const connect = require('./utils/db');
-require('dotenv').config();
+const { connect } = require('./utils/db');
+
+// routes
+const bookRoutes = require('./routes/book.routes');
+const userRoutes = require('./routes/user.routes');
 
 // server config
 connect();
 const PORT = process.env.PORT || 3000;
 const server = express();
-const router = express.Router();
-
-// routes
-const userRoutes = require('./routes/user.routes');
-const bookRoutes = require('./routes/book.routes');
+// const router = express.Router();
 
 // Middlewares
-server.use(passport.initialize());
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
+server.use(passport.initialize());
 
 // routes
-server.use('/users', userRoutes);
 server.use('/books', bookRoutes);
+server.use('/users', userRoutes);
 
 // error control
 server.use('*', (req, res, next) => {
