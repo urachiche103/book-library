@@ -8,26 +8,42 @@ router.post('/register', (req, res, next) => {
         if (error) {
             return next(error);
         }
+        user.password = null;
         req.logIn(user, (error) => {
             if (error) {
                 return next(error);
             }
             return res.status(201).json(user)
         });
-};
-passport.authenticate('register', done)(req);
+    };
+    const register = passport.authenticate('register', done);
+    register(req);
 });
 
 router.post('/login', (req, res, next) => {
-    passport.authenticate('login', (error, user) => {
-        if (error) return next(error)
+    const done = (error, user) => {
+        if (error) {
+            return next(error);
+        }
+        user.password = null;
         req.logIn(user, (error) => {
             if (error) {
                 return next(error);
             }
-            return res.status(200).json(user)
+            return res.status(200).json(user);
         });
-    })(req);
+    };
+    const login = passport.authenticate('login', done);
+    login(req);
+});
+
+router.post('/logout', (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        return res.status(200).send();
+    });
 });
 
 module.exports = router;
