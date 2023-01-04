@@ -1,8 +1,8 @@
 const express = require('express');
-
 const mongoose = require('mongoose');
-
 const Book = require('../models/Book');
+
+const fileMiddleware = require('../middlewares/file.middleware');
 
 const router = express.Router();
 
@@ -64,6 +64,28 @@ router.post('/create', async(req, res, next) => {
             title: req.body.title,
             year: req.body.year
         });
+        const createdBook = await newBook.save();
+        return res.status(201).json(createdBook);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// upload a picture
+router.post('/', [fileMiddleware.upload.single('picture'), fileMiddleware.uploadToCloudinary], async (req, res, next) => {
+    try {
+        const cloudinaryUrl = req.file_url ? req.file_url : null;
+        const { author, country, language, pages, title, year } = req.body;
+        const book = {
+            author,
+            country,
+            language,
+            pages,
+            title,
+            year,
+            picture: cloudinaryUrl
+        };
+        newBook = new Book(book);
         const createdBook = await newBook.save();
         return res.status(201).json(createdBook);
     } catch (error) {
