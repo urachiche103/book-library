@@ -35,7 +35,7 @@ server.use(
 );
 server.use(passport.initialize());
 server.use(passport.session());
-server.use(express.static(path.join(__dirname, 'public')));
+// server.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 server.use('/books', bookRoutes);
@@ -44,12 +44,12 @@ server.use('/users', userRoutes);
 // error control
 server.use('*', (req, res, next) => {
   const msg = 'Route not found';
-  const error = new Error ('Route not found');
-  error.status = 400;
+  const error = new Error('Route not found');
+  error.status = 404;
   next(error);
   const log = `${msg}
-  `${req.path}
-  `${new Date().toISOString()}\n`;
+  ${req.path}
+  ${new Date().toISOString()}\n`;
   logError(log);
 });
 server.use((error, req, res, next) => {

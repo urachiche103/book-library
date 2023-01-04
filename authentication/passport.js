@@ -12,9 +12,6 @@ passport.use(
         {
             usernameField: 'email',
             passwordField: 'password',
-            // nameField: 'name',
-            // lastNameField: 'lastName',
-            // phoneNumberField: 'phoneNumber',
             passReqToCallback: true,
         },
         async (req, email, password, done) => {
@@ -73,6 +70,7 @@ passport.use(
 passport.serializeUser((user, done) => {
     return done(null, user._id);
 });
+
 passport.deserializeUser(async (userId, done) => {
     try {
         const existingUser = await User.findById(userId);

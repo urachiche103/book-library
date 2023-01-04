@@ -40,8 +40,6 @@ const uploadToCloudinary = async (req, res, next) => {
             return next();
         } catch(error) {
             return next(error)
-        } else {
-            return next();
         }
     }
 };
