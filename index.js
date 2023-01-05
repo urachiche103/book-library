@@ -3,17 +3,20 @@ const path = require('path');
 require('dotenv').config();
 
 // authentication
+const mongoose = require('mongoose');
 const session = require('express-session');
+// const MongoStore = require('connect-mongo');
 const passport = require('passport');
 require('./authentication/passport');
 
 // utils
-const { connect } = require('./utils/db');
+const { connect, DB_URL } = require('./utils/db');
 const logError = require('./utils/log');
 
 // routes
 const bookRoutes = require('./routes/book.routes');
 const userRoutes = require('./routes/user.routes');
+const MongoStore = require('connect-mongo');
 
 // server config
 connect();
@@ -29,13 +32,16 @@ server.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 3600000
+      maxAge: 3600000,
     },
+    store: MongoStore.create({
+      mongoUrl: DB_URL,
+    })
   })
 );
 server.use(passport.initialize());
 server.use(passport.session());
-// server.use(express.static(path.join(__dirname, 'public')));
+server.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 server.use('/books', bookRoutes);

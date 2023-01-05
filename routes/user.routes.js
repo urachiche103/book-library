@@ -42,8 +42,11 @@ router.post('/logout', (req, res, next) => {
         if (err) {
             return next(err);
         }
-        return res.status(200).send();
-    });
+        req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            return res.status(200).json('See you soon!')
+        });
+    })
 });
 
 module.exports = router;
