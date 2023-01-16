@@ -54,25 +54,25 @@ router.get('/author/:author', async (req, res) => {
 });
 
 // create a new book
-router.post('/create', async(req, res, next) => {
-    try {
-        const newBook = new Book({
-            author: req.body.author,
-            country: req.body.country,
-            language: req.body.language,
-            pages: req.body.pages,
-            title: req.body.title,
-            year: req.body.year
-        });
-        const createdBook = await newBook.save();
-        return res.status(201).json(createdBook);
-    } catch (error) {
-        next(error);
-    }
-});
+// router.post('/create', async(req, res, next) => {
+//     try {
+//         const newBook = new Book({
+//             author: req.body.author,
+//             country: req.body.country,
+//             language: req.body.language,
+//             pages: req.body.pages,
+//             title: req.body.title,
+//             year: req.body.year
+//         });
+//         const createdBook = await newBook.save();
+//         return res.status(201).json(createdBook);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 // upload a picture
-router.post('/', [fileMiddlewares.upload.single('picture'), fileMiddlewares.uploadToCloudinary], async (req, res, next) => {
+router.post('/create', [fileMiddlewares.upload.single('picture'), fileMiddlewares.uploadToCloudinary], async (req, res, next) => {
     try {
         const cloudinaryUrl = req.file_url ? req.file_url : null;
         const { author, country, language, pages, title, year } = req.body;
