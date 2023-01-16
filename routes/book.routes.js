@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Book = require('../models/Book');
 
-const fileMiddleware = require('../middlewares/file.middleware');
+const fileMiddlewares = require('../middlewares/file.middleware');
 
 const router = express.Router();
 
@@ -72,11 +72,11 @@ router.post('/create', async(req, res, next) => {
 });
 
 // upload a picture
-router.post('/', [fileMiddleware.upload.single('picture'), fileMiddleware.uploadToCloudinary], async (req, res, next) => {
+router.post('/', [fileMiddlewares.upload.single('picture'), fileMiddlewares.uploadToCloudinary], async (req, res, next) => {
     try {
         const cloudinaryUrl = req.file_url ? req.file_url : null;
         const { author, country, language, pages, title, year } = req.body;
-        const book = {
+        const newBook = {
             author,
             country,
             language,
@@ -85,7 +85,7 @@ router.post('/', [fileMiddleware.upload.single('picture'), fileMiddleware.upload
             year,
             picture: cloudinaryUrl
         };
-        newBook = new Book(book);
+        newBook = new Book(newBook);
         const createdBook = await newBook.save();
         return res.status(201).json(createdBook);
     } catch (error) {

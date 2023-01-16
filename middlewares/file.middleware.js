@@ -9,8 +9,8 @@ const storage = multer.diskStorage({
         cb(null, `${Date.now()}-${file.originalname}`);
     },
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../temp'));
-    }
+        cb(null, path.join(__dirname, '../temp/uploads'))
+    },
 });
 
 const VALID_FILE_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
@@ -21,7 +21,7 @@ const fileFilter = (req, file, cb) => {
     } else {
         cb(null, true);
     }
-}
+};
 
 const upload = multer({
     storage,
@@ -33,13 +33,13 @@ const uploadToCloudinary = async (req, res, next) => {
         try {
             const filePath = req.file.path;
             const image = await cloudinary.uploader.upload(filePath);
-            
+
             await fs.unlinkSync(filePath);
             
             req.file_url = image.secure_url;
             return next();
         } catch(error) {
-            return next(error)
+            return next(error) 
         }
     }
 };

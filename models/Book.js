@@ -10,6 +10,7 @@ const bookSchema = new Schema(
     pages: { type: Number },
     title: { type: String, required: true },
     year: { type: Number },
+    picture: { type: String },
   },
   {
     timestamps: true,
